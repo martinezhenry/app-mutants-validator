@@ -1,4 +1,4 @@
-FROM openjdk:11-ea-jdk-alpine as builder
+FROM openjdk:14-alpine as builder
 
 WORKDIR /home/app/bin
 COPY ./core/target/core*.jar app-mutants.jar
@@ -8,7 +8,7 @@ RUN java -Djarmode=layertools -jar app-mutants.jar extract
 
 ## Builder image layered
 
-FROM openjdk:11-ea-jdk-alpine
+FROM openjdk:14-alpine
 LABEL maintainer="Henry Martinez (henry.martinezd@gmail.com)"
 
 ENV TZ=America/Bogota
