@@ -53,7 +53,7 @@
                     </includes>
                     <appName>${heroku.app.name}</appName>
                     <processTypes>
-                        <web>java $JAVA_OPTS -jar target/core-1.0.0-SNAPSHOT.jar</web>
+                        <web>java $JAVA_OPTS -jar -Dserver.port=$PORT target/core-1.0.0-SNAPSHOT.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>
