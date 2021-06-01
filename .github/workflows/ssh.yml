@@ -15,8 +15,8 @@ jobs:
       - name: Install SSH Key
         run: |
           mkdir -p ~/.ssh/
-          echo "$EC2_AWS_KEY" > ../private.key
-          sudo chmod 600 ../private.key
+          echo "$EC2_AWS_KEY" > ~/.ssh/id_rsa
+          sudo chmod 600 ~/.ssh/id_rsa
           echo "$SSH_HOST_EC2" > ~/.ssh/known_hosts
         shell: bash
         env:
