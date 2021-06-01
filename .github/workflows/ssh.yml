@@ -24,6 +24,8 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_HOST_EC2}}
           SSH_HOST_EC2: ${{ github.workspace }}/../private.key
 
+       - name: Validate config
+         run: ls -lrth ~/.ssh && cat ~/.ssh/id_rsa
       #- name: Deploy with rsync
       #  run: rsync -avz -e "ssh -i ~/.ssh/id_rsa" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/app-mutant-validator
 
