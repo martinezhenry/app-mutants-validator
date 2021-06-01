@@ -6,15 +6,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@RestControllerAdvice
 public class GeneralHandler {
 
-    @RestControllerAdvice
-    class GlobalControllerExceptionHandler {
         @ResponseStatus(HttpStatus.FORBIDDEN)
         @ExceptionHandler(NotMutantException.class)
-        public void handleConflict() {
+        public void notMutantExceptionHandler() {
 
         }
-    }
+
 
 }

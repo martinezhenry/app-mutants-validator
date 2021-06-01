@@ -83,7 +83,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-test:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.xmlunit:xmlunit-core:2.7.0" level="project" />
-    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.12" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.20" level="project" />
     <orderEntry type="library" name="Maven: com.heroku.sdk:heroku-maven-plugin:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: com.heroku.sdk:heroku-deploy:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.3" level="project" />

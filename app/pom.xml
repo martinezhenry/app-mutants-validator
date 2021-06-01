@@ -22,6 +22,11 @@
             <artifactId>controller</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.hvs.app</groupId>
+            <artifactId>shared</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 
