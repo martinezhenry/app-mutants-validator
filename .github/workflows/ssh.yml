@@ -17,7 +17,7 @@ jobs:
           mkdir -p ~/.ssh/
           echo "$EC2_AWS_KEY" > ~/.ssh/id_rsa
           sudo chmod 600 ~/.ssh/id_rsa
-          echo "$SSH_HOST_EC2" > ~/.ssh/known_hosts
+        #  echo "$SSH_HOST_EC2" > ~/.ssh/known_hosts
         shell: bash
         env:
           EC2_AWS_KEY: ${{secrets.EC2_AWS_KEY}}
