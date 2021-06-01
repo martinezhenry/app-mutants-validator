@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.0</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
+    <modules>
+        <module>controller</module>
+        <module>core</module>
+    </modules>
+
+    <groupId>com.hvs.app</groupId>
+    <artifactId>mutants-validator</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <distributionManagement>
+        <repository>
+            <id>gh-packages</id>
+            <name>Repository</name>
+            <url>${repository.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>gh-packages</id>
+            <name>Snapshot Repository</name>
+            <url>${repository.snapshot.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <connection>${scm.connection}</connection>
+        <url>${scm.url}</url>
+        <developerConnection>${scm.developerConnection}</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+
+    <properties>
+        <java.version>11</java.version>
+        <repository.url>https://maven.pkg.github.com/martinezhenry/*</repository.url>
+        <repository.snapshot.url>https://maven.pkg.github.com/martinezhenry/*</repository.snapshot.url>
+        <!-- config de scm para github donde se crearan los tags y release -->
+        <scm.connection>scm:git:git@github.com:martinezhenry/app-mutants-validator.git</scm.connection>
+        <scm.url>scm:git:git@github.com:martinezhenry/app-mutants-validator.git</scm.url>
+        <scm.developerConnection>scm:git:git@github.com:martinezhenry/app-mutants-validator.git</scm.developerConnection>
+        <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+        <spring-boot-version>2.4.0</spring-boot-version>
+        <app.type>service</app.type>
+    </properties>
+
+
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <version>${spring-boot-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+        </dependency>-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+    </dependencies>
+
+</project>
