@@ -1,5 +1,6 @@
 FROM maven:3.5-jdk-11 AS build
-COPY src /usr/src/app/src
+COPY core /usr/src/app/core
+COPY controller /usr/src/app/controller
 COPY pom.xml /usr/src/app
 RUN mvn -f /usr/src/app/pom.xml clean package
 
