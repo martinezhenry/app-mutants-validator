@@ -40,6 +40,25 @@
         <tag>HEAD</tag>
     </scm>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>3.0.4</version>
+                <configuration>
+                    <includeTarget>false</includeTarget>
+                    <includes>
+                        <include>./target/core-1.0.0-SNAPSHOT.jar</include>
+                    </includes>
+                    <appName>${heroku.app.name}</appName>
+                    <processTypes>
+                        <web>java $JAVA_OPTS -jar target/core-1.0.0-SNAPSHOT.jar</web>
+                    </processTypes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <java.version>11</java.version>
@@ -54,7 +73,6 @@
         <app.type>service</app.type>
         <heroku.app.name>app-mutants-validator</heroku.app.name>
         <jdkVersion>11</jdkVersion>
-
     </properties>
 
 
