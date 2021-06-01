@@ -1,7 +1,12 @@
+FROM maven:3.5-jdk-11 AS build
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+RUN mvn -f /usr/src/app/pom.xml clean package
+
 FROM openjdk:14-alpine as builder
 
 WORKDIR /home/app/bin
-COPY ./core/target/core*.jar app-mutants.jar
+COPY --from=build /usr/src/app/core/target/core*.jar app-mutants.jar
 
 
 RUN java -Djarmode=layertools -jar app-mutants.jar extract
