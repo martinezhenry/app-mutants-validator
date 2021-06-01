@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/app-mutants-validator.iml" filepath="$PROJECT_DIR$/.idea/app-mutants-validator.iml" />
       <module fileurl="file://$PROJECT_DIR$/api/controller.iml" filepath="$PROJECT_DIR$/api/controller.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
     </modules>
   </component>
 </project>
