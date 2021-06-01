@@ -1,7 +1,8 @@
 FROM maven:3.5-jdk-11 AS build
-COPY core /usr/src/app/core
+COPY app /usr/src/app/app
 COPY controller /usr/src/app/controller
 COPY service /usr/src/app/service
+COPY shared /usr/src/app/shared
 COPY pom.xml /usr/src/app
 RUN mvn -f /usr/src/app/pom.xml clean package
 
@@ -16,7 +17,7 @@ RUN java -Djarmode=layertools -jar app-mutants.jar extract
 ## Builder image layered
 
 FROM openjdk:14-alpine
-LABEL maintainer="Henry Martinez (henry.martinezd@gmail.com)"
+LABEL maintainer="Henry Martinez"
 
 ENV TZ=America/Bogota
 
