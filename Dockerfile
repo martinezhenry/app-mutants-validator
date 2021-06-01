@@ -10,7 +10,7 @@ RUN mvn -f /usr/src/app/pom.xml clean package
 FROM openjdk:14-alpine as builder
 
 WORKDIR /home/app/bin
-COPY --from=build /usr/src/app/core/target/core*.jar app-mutants.jar
+COPY --from=build /usr/src/app/app/target/core*.jar app-mutants.jar
 
 
 RUN java -Djarmode=layertools -jar app-mutants.jar extract
