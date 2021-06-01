@@ -6,3 +6,7 @@ logging:
     com:
       hvs:
         app: DEBUG
+
+server:
+  tomcat:
+    max-threads: 500
