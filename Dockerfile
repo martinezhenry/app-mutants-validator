@@ -3,6 +3,7 @@ COPY app /usr/src/app/app
 COPY controller /usr/src/app/controller
 COPY service /usr/src/app/service
 COPY shared /usr/src/app/shared
+COPY entity /usr/src/app/entity
 COPY pom.xml /usr/src/app
 RUN mvn -f /usr/src/app/pom.xml clean package
 
