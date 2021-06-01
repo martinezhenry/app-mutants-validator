@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  novotrans:
+    #image: "${IMAGEN}"
+    build: .
+    ports:
+      - target: "${TARGET_PORT}"
+        published: "${PUBLISH_PORT}"
+        protocol: tcp
+        mode: ingress
+    #env_file:
+    #  - ${ENV_FILE}
+    #volumes:
+    #  - logs:/home/novotrans/logs
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '${CPU}'
+          memory: ${RAM}
+    #secrets:
+    #  - DB_USER_SGC
+    #  - DB_PASS_SGC
+#volumes:
+#  logs:
+#    external: true
+
+#secrets:
+#  DB_USER_SGC:
+#    external: true
+#  DB_PASS_SGC:
+#    external: true
+
