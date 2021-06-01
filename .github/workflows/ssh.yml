@@ -1,8 +1,7 @@
 
 
-on:
-  release:
-    types: [ created ]
+on: [push]
+
 
 name: Deploy to server ssh
 
