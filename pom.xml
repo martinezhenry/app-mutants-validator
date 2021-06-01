@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -7,13 +8,15 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.0</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <modules>
         <module>controller</module>
-        <module>core</module>
+        <module>app</module>
         <module>service</module>
+        <module>entity</module>
+        <module>shared</module>
     </modules>
 
     <groupId>com.hvs.app</groupId>
@@ -48,14 +51,14 @@
         <!-- config de scm para github donde se crearan los tags y release -->
         <scm.connection>scm:git:git@github.com:martinezhenry/app-mutants-validator.git</scm.connection>
         <scm.url>scm:git:git@github.com:martinezhenry/app-mutants-validator.git</scm.url>
-        <scm.developerConnection>scm:git:git@github.com:martinezhenry/app-mutants-validator.git</scm.developerConnection>
+        <scm.developerConnection>scm:git:git@github.com:martinezhenry/app-mutants-validator.git
+        </scm.developerConnection>
         <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
         <spring-boot-version>2.4.0</spring-boot-version>
         <app.type>service</app.type>
         <heroku.app.name>app-mutants-validator</heroku.app.name>
         <jdkVersion>11</jdkVersion>
     </properties>
-
 
 
     <dependencies>
@@ -78,7 +81,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.20</version>
         </dependency>
         <dependency>
             <groupId>com.heroku.sdk</groupId>
