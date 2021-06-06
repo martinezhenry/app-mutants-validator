@@ -15,7 +15,7 @@
         <module>controller</module>
         <module>app</module>
         <module>service</module>
-        <module>entity</module>
+        <module>model</module>
         <module>shared</module>
     </modules>
 
@@ -70,7 +70,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot-version}</version>
         </dependency>
         <dependency>

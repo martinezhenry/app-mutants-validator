@@ -1,11 +1,11 @@
 package com.hvs.mutant.controller;
 
-import com.hvs.mutant.entity.Dna;
-import com.hvs.mutant.entity.Stats;
+import com.hvs.mutant.model.Specimen;
+import com.hvs.mutant.model.Stats;
 
 public interface MutantController {
 
-    void mutant(Dna dna);
+    void mutant(Specimen specimen);
 
     Stats stats();
 }

@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/core/app.iml" filepath="$PROJECT_DIR$/core/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/app-mutants-validator.iml" filepath="$PROJECT_DIR$/.idea/app-mutants-validator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/api/controller.iml" filepath="$PROJECT_DIR$/api/controller.iml" />
-      <module fileurl="file://$PROJECT_DIR$/entity/entity.iml" filepath="$PROJECT_DIR$/entity/entity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/controller/controller.iml" filepath="$PROJECT_DIR$/controller/controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/model/model.iml" filepath="$PROJECT_DIR$/model/model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mutants-validator.iml" filepath="$PROJECT_DIR$/mutants-validator.iml" />
       <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
       <module fileurl="file://$PROJECT_DIR$/shared/shared.iml" filepath="$PROJECT_DIR$/shared/shared.iml" />
     </modules>

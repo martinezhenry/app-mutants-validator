@@ -1,0 +1,7 @@
+logging:
+  level:
+    com:
+      hvs:
+        mutant: DEBUG
+  pattern:
+    level: "request-id=[%X{request-id}] remote-ip=[%X{remote-ip}] %5p"

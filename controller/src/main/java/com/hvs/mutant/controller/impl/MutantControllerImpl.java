@@ -1,8 +1,8 @@
 package com.hvs.mutant.controller.impl;
 
 import com.hvs.mutant.controller.MutantController;
-import com.hvs.mutant.entity.Dna;
-import com.hvs.mutant.entity.Stats;
+import com.hvs.mutant.model.Specimen;
+import com.hvs.mutant.model.Stats;
 import com.hvs.mutant.service.MutantService;
 import com.hvs.mutant.shared.exception.NotMutantException;
 import org.slf4j.Logger;
@@ -25,16 +25,21 @@ public class MutantControllerImpl implements MutantController {
 
 
     @Override
-    @PostMapping(value = {"/mutant"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void mutant(@RequestBody Dna dna) {
-        logger.debug("running mutant method");
-        if (!mutantService.isMutant(dna)) {
-            throw new NotMutantException();
+    @PostMapping(value = {"/mutant"}, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void mutant(@RequestBody Specimen specimen) {
+        try {
+            //MDC.put("request-id", request.getSessionId());
+            logger.debug("running mutant method");
+            if (!mutantService.isMutant(specimen.getDna())) {
+                throw new NotMutantException();
+            }
+        } finally {
+           // MDC.clear();
         }
     }
 
     @Override
-    @GetMapping(value = "/stats", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/stats", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Stats stats() {
         logger.debug("running statistics method");
         return null;
