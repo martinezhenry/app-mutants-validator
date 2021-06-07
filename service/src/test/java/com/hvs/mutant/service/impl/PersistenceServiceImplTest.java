@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest(classes = {PersistenceServiceImpl.class, AppConfig.class})
 class PersistenceServiceImplTest {
 
@@ -59,9 +57,7 @@ class PersistenceServiceImplTest {
         Assertions.assertDoesNotThrow(() -> persistenceService.saveSpecimen(specimen));
 
 
-
     }
-
 
 
     @Test

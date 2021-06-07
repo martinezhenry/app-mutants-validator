@@ -24,8 +24,6 @@ class ValidationDataTest {
         sequences.add(sequence);
         Assertions.assertNotNull(validationData.getSequences());
         Assertions.assertEquals(0, validationData.getSequences().size());
-        validationData.setSequences(sequences);
-        Assertions.assertEquals(sequences, validationData.getSequences());
 
     }
 }

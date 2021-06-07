@@ -5,6 +5,9 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Model to represent DNA's sequences
+ */
 @Data
 public class Sequence {
 
@@ -13,6 +16,7 @@ public class Sequence {
 
 
     public Sequence() {
+        // initializing list of nucleotides
         nucleotides = new ArrayList<>();
     }
 

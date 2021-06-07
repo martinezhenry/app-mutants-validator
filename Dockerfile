@@ -7,6 +7,9 @@ COPY entity /usr/src/app/entity
 COPY model /usr/src/app/model
 COPY repository /usr/src/app/repository
 COPY pom.xml /usr/src/app
+
+RUN export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=128m"
+
 RUN mvn -f /usr/src/app/pom.xml clean package
 
 FROM openjdk:14-alpine as builder

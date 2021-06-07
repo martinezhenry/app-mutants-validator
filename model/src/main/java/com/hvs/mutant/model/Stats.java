@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
+
+/**
+ * Model to represent the stats of the validations
+ */
 @AllArgsConstructor
 @Data
 public class Stats {

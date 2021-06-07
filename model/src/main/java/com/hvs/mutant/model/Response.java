@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * Model to represent response of services
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response {

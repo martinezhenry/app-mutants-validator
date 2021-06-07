@@ -55,6 +55,12 @@ class MutantApplicationTest {
     @MockBean
     private SpecimenRepository specimenRepository;
 
+
+    /***
+     * Create Mongo Embedded instance to use in test
+     * @return MongoTemplate instance
+     * @throws IOException
+     */
     @Bean
     @Primary
     public MongoTemplate mongoTemplate1() throws IOException {
@@ -72,6 +78,10 @@ class MutantApplicationTest {
         return new MongoTemplate(MongoClients.create(), "");
     }
 
+
+    /**
+     * Initial config
+     */
     @BeforeEach
     void setUp() {
         specimen = new Specimen();
@@ -82,14 +92,26 @@ class MutantApplicationTest {
 
     }
 
+
+    /**
+     * Validate mutant service with valid DNA
+     */
     @Test
     void mainValid() {
+
+
+        // *** Testing Not Mutant DNA
+
+        // Stats service & Mutant Service call
         Stats stats = this.restTemplate.getForObject("http://" + host + ":" + port + "/" + actionStats, Stats.class);
         Response response = this.restTemplate.postForObject("http://" + host + ":" + port + "/" + actionMutant, specimen, Response.class);
+
+        // asserts to stats
         Assertions.assertNotNull(stats);
         Assertions.assertEquals(0, stats.getCountHumanDna());
         Assertions.assertEquals(0, stats.getCountMutantDna());
 
+        // asserts to response
         Assertions.assertNotNull(response);
         Assertions.assertEquals(specimen, response.getSpecimen());
         Assertions.assertFalse(response.getSpecimen().isMutant());
@@ -98,6 +120,8 @@ class MutantApplicationTest {
         Assertions.assertNotNull(response.getDatetime());
         Assertions.assertNotNull(response.getRequestId());
 
+
+        // *** Testing Mutant DNA
         String[] dna = new String[]{"AAAA", "ATGA", "AATG", "ATGA"};
         int mutantSequence = 2;
         specimen.setDna(dna);
@@ -112,6 +136,7 @@ class MutantApplicationTest {
         specimen.setSequences(sequences);
         response = this.restTemplate.postForObject("http://" + host + ":" + port + "/" + actionMutant, specimen, Response.class);
 
+        // asserts to response
         Assertions.assertNotNull(response);
         Assertions.assertEquals(specimen, response.getSpecimen());
         Assertions.assertEquals(mutantSequence, response.getSpecimen().getSequences().size());

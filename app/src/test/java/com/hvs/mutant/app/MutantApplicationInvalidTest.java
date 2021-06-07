@@ -35,6 +35,7 @@ public class MutantApplicationInvalidTest {
     private final String host = "localhost";
     private final String actionStats = "stats";
     private final String actionMutant = "mutant";
+    private final String DB_NAME = "app-mutant-validator";
 
     @Autowired
     private AppConfig config;
@@ -51,23 +52,33 @@ public class MutantApplicationInvalidTest {
     private PersistenceService persistenceService;
 
 
+    /***
+     * Create Mongo Embedded instance to use in test
+     * @return MongoTemplate instance
+     * @throws IOException
+     */
     @Bean
     @Primary
     public MongoTemplate mongoTemplate1() throws IOException {
-        //String ip = "localhost";
+        // getting random port
         int randomPort = SocketUtils.findAvailableTcpPort();
 
-        IMongodConfig mongoConfig = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
+        // building config to instance
+        IMongodConfig mongoConfig = new MongodConfigBuilder().version(Version.Main.DEVELOPMENT)
                 .net(new Net(host, randomPort, Network.localhostIsIPv6()))
                 .build();
 
+        // getting instance & starting it
         MongodStarter starter = MongodStarter.getDefaultInstance();
         MongodExecutable mongodExecutable = starter.prepare(mongoConfig);
         mongodExecutable.start();
         //return new MongoTemplate(MongoClients.create(String.format(MONGO_DB_URL, ip, randomPort)),MONGO_DB_NAME);
-        return new MongoTemplate(MongoClients.create(), "");
+        return new MongoTemplate(MongoClients.create(), DB_NAME);
     }
 
+    /**
+     * Initial config
+     */
     @BeforeEach
     void setUp() {
         specimen = new Specimen();
@@ -77,8 +88,13 @@ public class MutantApplicationInvalidTest {
 
     }
 
+
+    /**
+     * Validate mutant service with invalid DNA
+     */
     @Test
     void mainInvalid() {
+        // Invalid structure DNA
         String[] dna = new String[]{"AAAA", "ATGAT", "AATG", "ATGA"};
         int mutantSequence = 2;
         specimen.setDna(dna);
@@ -93,6 +109,7 @@ public class MutantApplicationInvalidTest {
         Assertions.assertNotNull(response.getRequestId());
 
 
+        // Forcing thrown exception with mocks
         String message = "Exception Test";
         Mockito.doThrow(new RuntimeException(message)).when(persistenceService).saveSpecimen(Mockito.any());
         dna = new String[]{"AAAA", "ATGA", "AATG", "ATGA"};
@@ -103,6 +120,19 @@ public class MutantApplicationInvalidTest {
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
         Assertions.assertNotNull(response.getMessage());
         Assertions.assertEquals(message, response.getMessage());
+        Assertions.assertNotNull(response.getDatetime());
+        Assertions.assertNotNull(response.getRequestId());
+
+
+        // Invalid content DNA
+        dna = new String[]{"1234", "1234", "1234", "1234"};
+        specimen.setDna(dna);
+        response = this.restTemplate.postForObject("http://" + host + ":" + port + "/" + actionMutant, specimen, Response.class);
+        Assertions.assertNotNull(response);
+        Assertions.assertNull(response.getSpecimen());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        Assertions.assertNotNull(response.getMessage());
+        Assertions.assertNotNull(response.getMessage());
         Assertions.assertNotNull(response.getDatetime());
         Assertions.assertNotNull(response.getRequestId());
 

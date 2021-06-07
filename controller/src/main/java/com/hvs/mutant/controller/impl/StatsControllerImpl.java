@@ -20,10 +20,17 @@ public class StatsControllerImpl implements StatsController {
         this.statsService = statsService;
     }
 
+    /**
+     * Method to expose GET service to query stats of DNAs checked
+     *
+     * @return Stats object JSON with stats
+     * Headers: Content-Type: application/json
+     */
     @Override
     @GetMapping(value = "/stats", produces = MediaType.APPLICATION_JSON_VALUE)
     public Stats stats() {
         logger.debug("running statistics method");
+        // call service stats to query stats
         return statsService.getStats();
     }
 }

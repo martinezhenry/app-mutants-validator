@@ -4,15 +4,12 @@ import com.hvs.mutant.controller.MutantController;
 import com.hvs.mutant.model.Response;
 import com.hvs.mutant.model.Specimen;
 import com.hvs.mutant.service.MutantService;
-import com.hvs.mutant.shared.exception.NotMutantException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 public class MutantControllerImpl implements MutantController {
@@ -25,17 +22,19 @@ public class MutantControllerImpl implements MutantController {
     }
 
 
+    /**
+     * Method to expose POST service to validate DNA of a Specimen
+     *
+     * @param specimen Specimen with DNA to validate
+     * @return Response Json with the validation result
+     */
     @Override
     @PostMapping(value = {"/mutant"}, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response mutant(@RequestBody Specimen specimen) {
 
         logger.debug("running mutant method");
+        // call to mutant service to validate DNA
         var response = mutantService.validate(specimen);
-        if (!Optional.ofNullable(response.getSpecimen()).orElse(specimen).isMutant()) {
-            logger.debug("specimen is not a mutant");
-            throw new NotMutantException(response.getMessage(), response.getSpecimen());
-        }
-
         return response;
 
     }

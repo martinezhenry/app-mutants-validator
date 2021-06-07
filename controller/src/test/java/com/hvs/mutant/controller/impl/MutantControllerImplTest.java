@@ -4,7 +4,6 @@ import com.hvs.mutant.controller.MutantController;
 import com.hvs.mutant.model.Response;
 import com.hvs.mutant.model.Specimen;
 import com.hvs.mutant.service.MutantService;
-import com.hvs.mutant.shared.exception.NotMutantException;
 import com.hvs.mutant.shared.util.MutantUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,12 +31,21 @@ class MutantControllerImplTest {
 
     }
 
+    /**
+     * Test to not mutant DNA
+     */
     @Test
     void notMutant() {
         specimen.setDna(new String[]{""});
-        Mockito.when(mutantService.validate(Mockito.any())).thenReturn(new Response());
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        Response response = MutantUtil.buildResponse(status.name(), status.value(), specimen, null);
+        Mockito.when(mutantService.validate(Mockito.any())).thenReturn(response);
         Assertions.assertNotNull(mutantController);
-        Assertions.assertThrows(NotMutantException.class, () -> mutantController.mutant(specimen));
+        Response responseResult = mutantController.mutant(specimen);
+        Assertions.assertNotNull(responseResult);
+        Assertions.assertNotNull(responseResult.getSpecimen());
+        Assertions.assertFalse(responseResult.getSpecimen().isMutant());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), responseResult.getStatus());
 
 
     }

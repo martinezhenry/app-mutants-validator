@@ -44,7 +44,7 @@ public class GeneralHandler {
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DnaStructureException.class)
+    @ExceptionHandler( {DnaStructureException.class})
     public ResponseEntity<Response> dnaStructureExceptionHandler(DnaStructureException e) {
         logger.debug("DNAStructureException: {}", e.getMessage(), e);
         var message = MutantUtil.buildResponse(e.getMessage()

@@ -13,7 +13,6 @@ public class NotMutantException extends RuntimeException {
     }
 
     @Getter
-    @Setter
     private Specimen specimen;
 
 }

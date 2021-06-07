@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class DnaServiceImpl implements DnaService {
@@ -20,6 +22,12 @@ public class DnaServiceImpl implements DnaService {
         this.config = config;
     }
 
+
+    /**
+     * Validate the structure & content of a sequence
+     * @param sequence
+     * @param dnaLength
+     */
     @Override
     public void validateSequenceData(char[] sequence, int dnaLength) {
         if (sequence.length != dnaLength) {
@@ -29,22 +37,31 @@ public class DnaServiceImpl implements DnaService {
             );
         }
 
-        String exp = "[A][T][C][D]";
-        if (String.valueOf(sequence).matches(exp)) {
-            logger.debug("matches");
-        } else {
-            logger.debug("not matches");
+        String exp = config.getExpDnaContentValid();
+        Pattern pat = Pattern.compile(exp);
+        Matcher matcher = pat.matcher(String.valueOf(sequence));
+        if (!matcher.matches()) {
+            throw new DnaStructureException(
+                    String.format(config.getErrorMessages().get(ErrorType.SEQ_CONTENT_INVALID.name())
+                            , Arrays.toString(sequence)));
         }
 
     }
 
 
+    /**
+     * Build a char table from DNA array
+     * @param dna Array of sequences
+     * @return Table char[][] generated
+     */
     @Override
     public char[][] buildDnaTable(String[] dna) {
         char[][] table = new char[dna.length][dna.length];
 
-        for (int row = 0; row < dna.length; row++) {
+        // loop of dna
+        for (var row = 0; row < dna.length; row++) {
             char[] rowData = dna[row].toCharArray();
+            // validate structured & content
             validateSequenceData(rowData, dna.length);
             table[row] = rowData;
         }

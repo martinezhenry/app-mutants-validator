@@ -1,9 +1,11 @@
 config:
   error-messages:
     SEQ_LENGTH_INVALID: "Invalid Nucleotides info to sequence %s, the length of the DNA sequence must be equal to the sequence size,sequence size: %s, expected %s"
+    SEQ_CONTENT_INVALID: "Invalid Content to sequence %s, only A,T,C,G values are allowed"
   # Indicate the number of sequences to detect in DNA in a human be a mutant
   min-seq-for-mutant: ${SEQUENCES:2}
   nucleotidesForSequence: ${NUCLEOTIDE_NUMBER:4}
   statusToMutant: ${MUTANT_STATUS:200}
   statusToNotMutant: ${NOT_MUTANT_STATUS:403}
   debug: ${DEBUG:false}
+  exp-dna-content-valid: "(A|T|C|G)+"

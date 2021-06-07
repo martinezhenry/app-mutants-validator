@@ -29,8 +29,6 @@ class NotMutantExceptionTest {
         Assertions.assertEquals(message, notMutantException.getMessage());
         Assertions.assertEquals(specimen, notMutantException.getSpecimen());
 
-        notMutantException.setSpecimen(specimenTest);
-        Assertions.assertEquals(specimenTest, notMutantException.getSpecimen());
 
     }
 }

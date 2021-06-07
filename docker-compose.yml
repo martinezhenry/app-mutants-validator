@@ -1,8 +1,9 @@
 version: "3.7"
 services:
   mutant-app:
-    #image: "${IMAGEN}"
     build: .
+    links:
+      - database
     ports:
       - target: "${TARGET_PORT}"
         published: "${PUBLISH_PORT}"
@@ -18,6 +19,10 @@ services:
         limits:
           cpus: '${CPU}'
           memory: ${RAM}
+  database:
+    image: mongo:4.4.0
+
+
     #secrets:
     #  - DB_USER_SGC
     #  - DB_PASS_SGC

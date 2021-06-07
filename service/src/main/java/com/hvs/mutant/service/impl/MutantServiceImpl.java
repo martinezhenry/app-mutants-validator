@@ -6,11 +6,14 @@ import com.hvs.mutant.service.MutantService;
 import com.hvs.mutant.service.PersistenceService;
 import com.hvs.mutant.service.SequenceService;
 import com.hvs.mutant.shared.config.AppConfig;
+import com.hvs.mutant.shared.exception.NotMutantException;
 import com.hvs.mutant.shared.util.MutantUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MutantServiceImpl implements MutantService {
@@ -36,6 +39,10 @@ public class MutantServiceImpl implements MutantService {
         HttpStatus status = (mutant) ? HttpStatus.valueOf(config.getStatusToMutant()) : HttpStatus.valueOf(config.getStatusToNotMutant());
         var response = MutantUtil.buildResponse(status.name(), status.value(), specimen, null);
         persistenceService.saveSpecimen(specimen);
+        if (!Optional.ofNullable(response.getSpecimen()).orElse(specimen).isMutant()) {
+            logger.debug("specimen is not a mutant");
+            throw new NotMutantException(response.getMessage(), response.getSpecimen());
+        }
         return response;
     }
 

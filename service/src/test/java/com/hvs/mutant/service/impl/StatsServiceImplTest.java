@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest(classes = {StatsServiceImpl.class, PersistenceServiceImpl.class, AppConfig.class})
 class StatsServiceImplTest {
 
@@ -32,7 +30,6 @@ class StatsServiceImplTest {
     void setUp() {
 
         Assertions.assertNotNull(statsService);
-
 
 
     }

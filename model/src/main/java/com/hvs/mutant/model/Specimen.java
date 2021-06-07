@@ -7,6 +7,9 @@ import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
+/**
+ * Model to represent the specimen to validate
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Specimen {

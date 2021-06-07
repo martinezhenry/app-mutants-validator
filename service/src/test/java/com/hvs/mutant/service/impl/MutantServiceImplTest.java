@@ -8,6 +8,7 @@ import com.hvs.mutant.repository.StatsRepository;
 import com.hvs.mutant.service.MutantService;
 import com.hvs.mutant.shared.config.AppConfig;
 import com.hvs.mutant.shared.exception.DnaStructureException;
+import com.hvs.mutant.shared.exception.NotMutantException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,6 @@ class MutantServiceImplTest {
     void validateDna() {
 
 
-
         Response response = mutantService.validate(specimen);
         Assertions.assertNotNull(response);
         Assertions.assertNotNull(response.getSpecimen());
@@ -71,11 +71,7 @@ class MutantServiceImplTest {
 
         String[] dna = new String[]{"ATGA", "GTGA", "GATG", "ATGA"};
         specimen.setDna(dna);
-        Response response = mutantService.validate(specimen);
-        Assertions.assertNotNull(response);
-        Assertions.assertNotNull(response.getSpecimen());
-        Assertions.assertFalse(response.getSpecimen().isMutant());
-        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
+        Assertions.assertThrows(NotMutantException.class, () -> mutantService.validate(specimen));
 
 
     }
@@ -89,6 +85,11 @@ class MutantServiceImplTest {
         Assertions.assertThrows(DnaStructureException.class,
                 () -> mutantService.validate(specimen));
 
+
+        dna = new String[]{"1234", "1234", "1243", "4321"};
+        specimen.setDna(dna);
+        Assertions.assertThrows(DnaStructureException.class,
+                () -> mutantService.validate(specimen));
 
     }
 

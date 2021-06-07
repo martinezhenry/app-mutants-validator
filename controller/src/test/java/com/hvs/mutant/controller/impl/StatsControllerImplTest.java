@@ -29,10 +29,13 @@ class StatsControllerImplTest {
 
     }
 
+    /**
+     * Test to query stats
+     */
     @Test
     void stats() {
 
-        Mockito.when(statsController.stats()).thenReturn(stats);
+        Mockito.when(statsService.getStats()).thenReturn(stats);
         Assertions.assertNotNull(statsController);
         Assertions.assertDoesNotThrow(() -> statsController.stats());
         Stats stats = statsController.stats();

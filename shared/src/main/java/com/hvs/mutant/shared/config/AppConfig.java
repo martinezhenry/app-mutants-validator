@@ -18,6 +18,7 @@ public class AppConfig {
     private int statusToMutant;
     private int statusToNotMutant;
     private boolean debug;
+    private String expDnaContentValid;
     //private String statsId;
 
     private HashMap<String, String> errorMessages;
