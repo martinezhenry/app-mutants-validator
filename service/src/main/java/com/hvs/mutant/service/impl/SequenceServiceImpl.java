@@ -25,6 +25,13 @@ public class SequenceServiceImpl implements SequenceService {
 
     }
 
+    /**
+     *
+     * @param data
+     * @param xCoordinate
+     * @param yCoordinate
+     * @return
+     */
     @Override
     public Nucleotide generateNucleotide(char data, int xCoordinate, int yCoordinate) {
         Nucleotide nucleotide = new Nucleotide();

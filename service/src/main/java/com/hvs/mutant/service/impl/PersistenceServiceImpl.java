@@ -28,6 +28,10 @@ public class PersistenceServiceImpl implements PersistenceService {
     }
 
 
+    /**
+     * Async method to save specimen data in database & update stats
+     * @param specimen Specimen to save
+     */
     @Override
     @Async
     public void saveSpecimen(Specimen specimen) {
@@ -50,17 +54,33 @@ public class PersistenceServiceImpl implements PersistenceService {
 
     }
 
+    /**
+     * Method to save Stats in database
+     * @param stats Stats to save
+     * @return Stats after the save
+     */
     @Override
     public Stats saveStats(Stats stats) {
         logger.trace("saving stats: {}", stats);
         return statsRepository.save(stats);
     }
 
+    /**
+     * Get stats from database
+     * @return Stats obtained
+     */
     @Override
     public Stats findStats() {
         return statsRepository.findById(STATS_ID).orElse(new Stats(STATS_ID, 0, 0, 0.0));
     }
 
+    /**
+     * Update stats depent of mutant param, if mutant is true
+     * count mutant increment, else count human increment
+     * @param stats Stats to comparte & update
+     * @param mutant boolean to indicate if is a mutant or not
+     * @return Stats updated
+     */
     @Override
     public Stats calculateStats(Stats stats, boolean mutant) {
 

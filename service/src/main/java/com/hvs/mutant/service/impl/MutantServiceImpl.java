@@ -24,6 +24,13 @@ public class MutantServiceImpl implements MutantService {
     private DnaService dnaService;
     private PersistenceService persistenceService;
 
+    /***
+     * Constructor with dependencies inject
+     * @param config
+     * @param sequenceService
+     * @param dnaService
+     * @param persistenceService
+     */
     public MutantServiceImpl(AppConfig config, SequenceService sequenceService, DnaService dnaService, PersistenceService persistenceService) {
         this.config = config;
         this.sequenceService = sequenceService;
@@ -32,13 +39,29 @@ public class MutantServiceImpl implements MutantService {
     }
 
 
+    /**
+     * Validate a specimen & build Response object
+     * @param specimen Specimen with DNA array
+     * @return Response with validation data
+     */
     @Override
     public Response validate(Specimen specimen) {
+        // detecting if is a mutant DNA
         boolean mutant = isMutant(specimen.getDna());
+
+        // setting result
         specimen.setMutant(mutant);
+
+        // build status from mutant result
         HttpStatus status = (mutant) ? HttpStatus.valueOf(config.getStatusToMutant()) : HttpStatus.valueOf(config.getStatusToNotMutant());
+
+        // Building response
         var response = MutantUtil.buildResponse(status.name(), status.value(), specimen, null);
+
+        // saving result in database
         persistenceService.saveSpecimen(specimen);
+
+        // validating mutant to throw NotMutantException if is not a mutant DNA
         if (!Optional.ofNullable(response.getSpecimen()).orElse(specimen).isMutant()) {
             logger.debug("specimen is not a mutant");
             throw new NotMutantException(response.getMessage(), response.getSpecimen());
@@ -59,10 +82,15 @@ public class MutantServiceImpl implements MutantService {
         Sequence sequenceOblique;
         Sequence sequenceReverseOblique;
 
+        // building table of dna
         char[][] table = dnaService.buildDnaTable(dna);
+
+        // print table to log
         MutantUtil.printDnaTable(table, logger);
+
         char[] nucleotidesRow;
 
+        // looping dna table
         for (int row = 0; row < table.length; row++) {
 
             /*
@@ -80,28 +108,36 @@ public class MutantServiceImpl implements MutantService {
 
                 /* ****************************************************************************
                  *  HORIZONTAL SECTION
+                 *  checking if exists a mutant sequence in Horizontal way
                  * ****************************************************************************/
                 logger.trace("---------------------------------------------------------------");
                 logger.trace("--- horizontal validation -------------------------------------");
                 logger.trace("Horizontal Sequence: {}", sequenceHorizontal);
+                // building nucleotide object
                 nucleotide = sequenceService.generateNucleotide(table[row][col], row, col);
+                // validating nucleotide in sequence horizontal
                 sequenceService.validateSequence(nucleotide, sequenceHorizontal);
+                // validating if sequence is completed
                 sequenceHorizontal = sequenceService.isComplete(sequenceHorizontal, validationData);
 
 
                 /* ****************************************************************************
                  *  VERTICAL SECTION
+                 * checking if exists a mutant sequence in Vertical way
                  * ****************************************************************************/
                 logger.trace("---------------------------------------------------------------");
                 logger.trace("--- vertical validation -------------------------------------");
                 logger.trace("Vertical Sequence: {}", sequenceVertical);
+                // building nucleotide object
                 nucleotide = sequenceService.generateNucleotide(table[col][row], col, row);
-
+                // validating nucleotide in sequence vertical
                 sequenceService.validateSequence(nucleotide, sequenceVertical);
+                // validating if sequence is completed
                 sequenceVertical = sequenceService.isComplete(sequenceVertical, validationData);
 
                 /* ****************************************************************************
                  *  OBLIQUES SECTION
+                 * checking if exists a mutant sequence in Oblique way
                  * ****************************************************************************/
 
                 /*
@@ -122,6 +158,8 @@ public class MutantServiceImpl implements MutantService {
                     int rRow = oRow;
                     int rCol = col - i;
 
+
+                    // checking if exists a mutant sequence in Oblique way (up to down)
                     if (!breakO) {
                         if (oRow < table.length && oCol < table[row].length) {
                             //nucleotide = table[tmpRow][tmpCol];
@@ -139,6 +177,7 @@ public class MutantServiceImpl implements MutantService {
                         }
                     }
 
+                    // checking if exists a mutant sequence in Oblique way (down to up)
                     if (!breakI) {
                         if (rCol >= 0 && rRow < table.length) {
                             logger.trace("---------------------------------------------------------------");
@@ -160,6 +199,7 @@ public class MutantServiceImpl implements MutantService {
                     }
 
 
+                    // if both obliques sequences is oversize table, breaking loop to current position
                     if (breakI && breakO) {
                         logger.trace("obliques oversize of table");
                         break;
@@ -173,6 +213,7 @@ public class MutantServiceImpl implements MutantService {
 
 
         logger.info("total sequences: size {}, data: {}", validationData.getSequences().size(), validationData.getSequences());
+        // checking if sequences found are over the expected
         boolean mutant = (validationData.getSequences().size() >= config.getMinSeqForMutant());
         logger.info("isMutant?: {}", mutant);
         return mutant;
