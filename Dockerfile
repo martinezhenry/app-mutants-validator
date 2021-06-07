@@ -5,6 +5,7 @@ COPY service /usr/src/app/service
 COPY shared /usr/src/app/shared
 COPY entity /usr/src/app/entity
 COPY model /usr/src/app/model
+COPY repository /usr/src/app/repository
 COPY pom.xml /usr/src/app
 RUN mvn -f /usr/src/app/pom.xml clean package
 
