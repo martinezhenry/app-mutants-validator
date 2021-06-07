@@ -76,7 +76,7 @@
               <success>true</success>
               <label>true</label>
               <code>true</code>
-              <message>true</message>
+              <response>true</response>
               <threadName>true</threadName>
               <dataType>true</dataType>
               <encoding>false</encoding>

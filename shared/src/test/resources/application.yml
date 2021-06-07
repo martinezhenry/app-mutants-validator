@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: "test"
+    include:
+      - "config"
+
+
+
+
+logging:
+  level:
+    com:
+      hvs:
+        mutant: DEBUG

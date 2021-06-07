@@ -1,6 +1,5 @@
 package com.hvs.mutant.filter;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -22,7 +21,7 @@ public class RequestResponseFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
             String ipAddress = request.getHeader("X-Forward-For");
-            if(ipAddress== null){
+            if (ipAddress == null) {
                 ipAddress = request.getRemoteAddr();
             }
 

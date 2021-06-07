@@ -1,116 +1,152 @@
 package com.hvs.mutant.service.impl;
 
-import com.hvs.mutant.model.Nucleotide;
-import com.hvs.mutant.model.Sequence;
-import com.hvs.mutant.model.ValidationData;
+import com.hvs.mutant.model.*;
+import com.hvs.mutant.service.DnaService;
 import com.hvs.mutant.service.MutantService;
-import com.hvs.mutant.shared.SequenceType;
+import com.hvs.mutant.service.PersistenceService;
+import com.hvs.mutant.service.SequenceService;
+import com.hvs.mutant.shared.config.AppConfig;
+import com.hvs.mutant.shared.util.MutantUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MutantServiceImpl implements MutantService {
 
-    Logger logger = LoggerFactory.getLogger(MutantServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(MutantServiceImpl.class);
+    private AppConfig config;
+    private SequenceService sequenceService;
+    private DnaService dnaService;
+    private PersistenceService persistenceService;
 
-    @Override
-    public boolean isMutant(String[] dna) {
-        logger.debug("checking dna");
-        if (dna.length == 0) {
-            return false;
-        }
-
-        for (String subDna : dna){
-
-        }
-
-        return true;
+    public MutantServiceImpl(AppConfig config, SequenceService sequenceService, DnaService dnaService, PersistenceService persistenceService) {
+        this.config = config;
+        this.sequenceService = sequenceService;
+        this.dnaService = dnaService;
+        this.persistenceService = persistenceService;
     }
 
 
+    @Override
+    public Response validate(Specimen specimen) {
+        boolean mutant = isMutant(specimen.getDna());
+        specimen.setMutant(mutant);
+        HttpStatus status = (mutant) ? HttpStatus.valueOf(config.getStatusToMutant()) : HttpStatus.valueOf(config.getStatusToNotMutant());
+        var response = MutantUtil.buildResponse(status.name(), status.value(), specimen, null);
+        persistenceService.saveSpecimen(specimen);
+        return response;
+    }
 
-    public boolean validateDna(String[] dna) {
+    /**
+     * Validate DNA to detect when a human is a mutant
+     *
+     * @param dna DNA to validate
+     * @return true: Mutant / false: not Mutant
+     */
+    public boolean isMutant(String[] dna) {
         ValidationData validationData = new ValidationData();
-        Sequence sequenceHorizontal = new Sequence();
-        Sequence sequenceVertical = new Sequence();
-        Sequence sequenceOblique = new Sequence();
-        Sequence sequenceReverseOblique = new Sequence();
+        Sequence sequenceHorizontal;
+        Sequence sequenceVertical;
+        Sequence sequenceOblique;
+        Sequence sequenceReverseOblique;
 
-        char[][] table = buildDnaTable(dna);
-        printDnaTable(table);
+        char[][] table = dnaService.buildDnaTable(dna);
+        MutantUtil.printDnaTable(table, logger);
         char[] nucleotidesRow;
 
         for (int row = 0; row < table.length; row++) {
 
+            /*
+             * Initializing Horizontal/Vertical variables
+             */
+            sequenceHorizontal = sequenceService.generateSequence(SequenceType.HORIZONTAL);
+            sequenceVertical = sequenceService.generateSequence(SequenceType.VERTICAL);
+
             nucleotidesRow = table[row];
             Nucleotide nucleotide;
 
-            logger.debug("---------------- Row {} ----------------", row+1);
+            logger.trace("---------------- Row {} ----------------", row + 1);
 
-            // validacion horizontal
             for (int col = 0; col < nucleotidesRow.length; col++) {
 
-                /************** Horizontal ******************/
-                nucleotide = generateNucleotide(table[row][col], row, col);
-                validateSequence(nucleotide, sequenceHorizontal);
-                sequenceComplete(sequenceHorizontal, validationData);
-                //logger.debug("Horizontal. data[row:{}, column:{}, value: {}, count: {}]", row+1, col+1, nucleotide, validationData.getCountH());
+                /* ****************************************************************************
+                 *  HORIZONTAL SECTION
+                 * ****************************************************************************/
+                logger.trace("---------------------------------------------------------------");
+                logger.trace("--- horizontal validation -------------------------------------");
+                logger.trace("Horizontal Sequence: {}", sequenceHorizontal);
+                nucleotide = sequenceService.generateNucleotide(table[row][col], row, col);
+                sequenceService.validateSequence(nucleotide, sequenceHorizontal);
+                sequenceHorizontal = sequenceService.isComplete(sequenceHorizontal, validationData);
 
 
-                /************** Vertical ******************/
-                nucleotide = generateNucleotide(table[col][row], col, row);
+                /* ****************************************************************************
+                 *  VERTICAL SECTION
+                 * ****************************************************************************/
+                logger.trace("---------------------------------------------------------------");
+                logger.trace("--- vertical validation -------------------------------------");
+                logger.trace("Vertical Sequence: {}", sequenceVertical);
+                nucleotide = sequenceService.generateNucleotide(table[col][row], col, row);
 
-                validateSequence(nucleotide, sequenceVertical);
-                sequenceComplete(sequenceVertical, validationData);
+                sequenceService.validateSequence(nucleotide, sequenceVertical);
+                sequenceVertical = sequenceService.isComplete(sequenceVertical, validationData);
 
-                //validateSequence(nucleotide, validationData, 2);
-                //logger.debug("Vertical. data[row:{}, column:{}, value: {}, count: {}]", col+1, row+1, nucleotide, validationData.getCountV());
+                /* ****************************************************************************
+                 *  OBLIQUES SECTION
+                 * ****************************************************************************/
 
+                /*
+                 * Initializing Obliques variables
+                 */
 
-                /************** Oblicua ******************/
                 boolean breakO = false;
                 boolean breakI = false;
+                sequenceOblique = sequenceService.generateSequence(SequenceType.OBLIQUE);
+                sequenceReverseOblique = sequenceService.generateSequence(SequenceType.REVERSE_OBLIQUE);
+
+                logger.trace("--- searching oblique sequences -------------------------------------");
                 for (int i = 0, j = table.length; i < table.length; i++, j--) {
-                    int tmpRow = row+i;
-                    int tmpCol = col+i;
 
-                    int tmpRow2 = row-j;
-                    int tmpCol2 = col-i;
+                    int oRow = row + i;
+                    int oCol = col + i;
 
+                    int rRow = oRow;
+                    int rCol = col - i;
 
                     if (!breakO) {
-                        if (tmpRow < table.length && tmpCol < table[row].length) {
+                        if (oRow < table.length && oCol < table[row].length) {
                             //nucleotide = table[tmpRow][tmpCol];
-                            nucleotide = generateNucleotide(table[tmpRow][tmpCol], tmpRow, tmpCol);
-                            validateSequence(nucleotide, sequenceOblique);
-                            sequenceComplete(sequenceOblique, validationData);
-                            //validateSequence(nucleotide, validationData, SequenceType.OBLIQUE);
-                            //logger.debug("Oblicua. data[row:{}, column:{}, value: {}, count: {}]", tmpRow + 1, tmpCol + 1, nucleotide, validationData.getCountO());
+                            logger.trace("---------------------------------------------------------------");
+                            logger.trace("--- oblique validation -------------------------------------");
+                            logger.trace("Oblique Sequence: {}", sequenceOblique);
+                            nucleotide = sequenceService.generateNucleotide(table[oRow][oCol], oRow, oCol);
+                            sequenceService.validateSequence(nucleotide, sequenceOblique);
+                            sequenceOblique = sequenceService.isComplete(sequenceOblique, validationData);
+
                         } else {
-                            //validationData.setSequenceV("");
-                            //logger.debug("oversize of table, max len to row & col is {}. Current position [{}][{}]", table.length, tmpRow + 1, tmpCol + 1);
-                            //break;
+                            sequenceOblique = sequenceService.generateSequence(SequenceType.OBLIQUE);
+                            logger.trace("oversize of table, max len to row & col is {}. Current position [{}][{}]", table.length, oRow, oCol);
                             breakO = true;
                         }
                     }
 
                     if (!breakI) {
-                        if (tmpCol2 >= 0 && tmpRow < table.length) {
-                            //nucleotide = table[tmpRow][tmpCol2];
-                            nucleotide = generateNucleotide(table[tmpRow][tmpCol2], tmpRow, tmpCol2);
+                        if (rCol >= 0 && rRow < table.length) {
+                            logger.trace("---------------------------------------------------------------");
+                            logger.trace("--- reverse oblique validation -------------------------------------");
+                            logger.trace("Reverse Oblique Sequence: {}", sequenceReverseOblique);
+                            nucleotide = sequenceService.generateNucleotide(table[rRow][rCol], rRow, rCol);
 
                             //validateSequence(nucleotide, validationData, SequenceType.REVERSE_OBLIQUE);
-                            validateSequence(nucleotide, sequenceReverseOblique);
-                            sequenceComplete(sequenceReverseOblique, validationData);
-                            logger.debug("Inversa Oblicua. data[row:{}, column:{}, value: {}, sequence: {}]", tmpRow + 1, tmpCol2 + 1, nucleotide, sequenceReverseOblique);
+                            sequenceService.validateSequence(nucleotide, sequenceReverseOblique);
+                            sequenceReverseOblique = sequenceService.isComplete(sequenceReverseOblique, validationData);
+                            logger.trace("Inversa Oblicua. data[row:{}, column:{}, value: {}, sequence: {}]", rRow, rCol, nucleotide, sequenceReverseOblique);
                         } else {
                             //validationData.setSequenceI("");
-                            logger.debug("Inversa oversize of table, min len to row & col is {}. Current position [{}][{}]", 0, tmpRow + 1, tmpCol2 - 1);
+                            sequenceReverseOblique = sequenceService.generateSequence(SequenceType.REVERSE_OBLIQUE);
+                            logger.trace("Inversa oversize of table, min len to row & col is {}. Current position [{}][{}]", 0, rRow, rCol);
                             //break;
                             breakI = true;
                         }
@@ -118,99 +154,21 @@ public class MutantServiceImpl implements MutantService {
 
 
                     if (breakI && breakO) {
+                        logger.trace("obliques oversize of table");
                         break;
                     }
 
                 }
 
-
-
-
             }
 
-
         }
 
 
-        logger.debug("total sequences: {}", validationData.getSequences());
-        return (validationData.getSequences().size() > 1);
-    }
-
-
-    public void sequenceComplete(Sequence sequence, ValidationData validationData){
-        if (sequence.getNucleotides().size() == 4) {
-            validationData.getSequences().add(sequence);
-            sequence = new Sequence();
-        }
-    }
-
-    public Nucleotide generateNucleotide(char data, int xCoordinate, int yCoordinate){
-        Nucleotide nucleotide = new Nucleotide();
-        nucleotide.setData(data);
-        nucleotide.setXCoordinate(xCoordinate);
-        nucleotide.setYCoordinate(yCoordinate);
-        return nucleotide;
-    }
-
-
-    public void validateSequence(Nucleotide nucleotide, Sequence sequence){
-
-        List<Nucleotide> nucleotides = sequence.getNucleotides();
-        int nucleotidesSize = nucleotides.size();
-        Nucleotide lastNucleotide = nucleotides.get(nucleotidesSize - 1);
-
-        Optional.ofNullable(lastNucleotide).ifPresentOrElse(previos -> {
-
-            char previosNucleotide = previos.getData();
-            char currentNucleotide = nucleotide.getData();
-
-            if (currentNucleotide == previosNucleotide) {
-                sequence.getNucleotides().add(nucleotide);
-
-                logger.debug("current nucleotides: {}", sequence.getNucleotides());
-                if (sequence.getNucleotides().size() == 4) {
-                    logger.debug("sequence completed, type: {}, current nucleotides: {}", sequence.getType(), sequence.getNucleotides());
-                }
-            } else {
-                sequence.setNucleotides(new ArrayList<>());
-                //seq = "";
-                //previosValue = '\u0000';
-            }
-            //previosNucleotide = currentNucleotide;
-
-
-        }, () -> {
-            sequence.getNucleotides().add(nucleotide);
-        });
-
-
-
-    }
-
-
-
-    public char[][] buildDnaTable(String [] dna){
-        char[][] table = new char[dna.length][dna.length];
-        for(int row = 0; row < dna.length; row++){
-            char[] rowData = dna[row].toCharArray();
-            table[row] = rowData;
-        }
-
-
-        return table;
-    }
-
-
-    public void printDnaTable(char[][] table){
-        StringBuilder line = new StringBuilder("| ");
-        for(int row = 0; row < table.length; row++){
-            for(int col = 0; col < table[row].length; col++) {
-                line.append(table[row][col]).append(" ");
-            }
-            line.append("|");
-            logger.debug("{}", line);
-            line = new StringBuilder("| ");
-        }
+        logger.info("total sequences: size {}, data: {}", validationData.getSequences().size(), validationData.getSequences());
+        boolean mutant = (validationData.getSequences().size() >= config.getMinSeqForMutant());
+        logger.info("isMutant?: {}", mutant);
+        return mutant;
     }
 
 

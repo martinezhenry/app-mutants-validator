@@ -1,10 +1,14 @@
 package com.hvs.mutant.service;
 
+
+import com.hvs.mutant.model.Response;
+import com.hvs.mutant.model.Specimen;
+
 public interface MutantService {
 
 
-    boolean isMutant(String[] dna);
-    boolean validateDna(String[] dna);
+    Response validate(Specimen specimen);
 
+    boolean isMutant(String[] dna);
 
 }

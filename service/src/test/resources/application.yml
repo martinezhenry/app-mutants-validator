@@ -5,3 +5,16 @@ logging:
         mutant: DEBUG
   pattern:
     level: "request-id=[%X{request-id}] remote-ip=[%X{remote-ip}] %5p"
+
+
+
+
+
+config:
+  error-messages:
+    SEQ_LENGTH_INVALID: "Invalid Nucleotides info to sequence %s, the length of the DNA sequence must be equal to the sequence size,sequence size: %s, expected %s"
+  # Indicate the number of sequences to detect in DNA in a human be a mutant
+  min-seq-for-mutant: ${SEQUENCES:2}
+  nucleotidesForSequence: ${NUCLEOTIDE_NUMBER:4}
+  status-to-mutant: ${MUTANT_STATUS:200}
+  status-to-not-mutant: ${NOT_MUTANT_STATUS:403}

@@ -1,4 +1,4 @@
-package com.hvs.mutant.shared;
+package com.hvs.mutant.model;
 
 public enum SequenceType {
 

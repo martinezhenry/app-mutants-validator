@@ -1,6 +1,4 @@
-
-
-on: [push]
+on: [ push ]
 
 
 name: Deploy to server ssh

@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: "test"
+    include:
+      - "config"
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: app-mutant-validator
+
+
+logging:
+  level:
+    com:
+      hvs:
+        mutant: DEBUG
