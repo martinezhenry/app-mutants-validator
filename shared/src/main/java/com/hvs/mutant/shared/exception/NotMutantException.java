@@ -2,9 +2,10 @@ package com.hvs.mutant.shared.exception;
 
 import com.hvs.mutant.model.Specimen;
 import lombok.Getter;
-import lombok.Setter;
 
-
+/**
+ * Exception Class to thrown when DNA is not mutant
+ */
 public class NotMutantException extends RuntimeException {
 
     public NotMutantException(String message, Specimen specimen) {
@@ -13,6 +14,6 @@ public class NotMutantException extends RuntimeException {
     }
 
     @Getter
-    private Specimen specimen;
+    private final Specimen specimen;
 
 }

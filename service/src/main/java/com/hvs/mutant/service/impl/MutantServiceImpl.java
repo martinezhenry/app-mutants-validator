@@ -76,7 +76,7 @@ public class MutantServiceImpl implements MutantService {
      * @return true: Mutant / false: not Mutant
      */
     public boolean isMutant(String[] dna) {
-        ValidationData validationData = new ValidationData();
+        var validationData = new ValidationData();
         Sequence sequenceHorizontal;
         Sequence sequenceVertical;
         Sequence sequenceOblique;
@@ -91,7 +91,7 @@ public class MutantServiceImpl implements MutantService {
         char[] nucleotidesRow;
 
         // looping dna table
-        for (int row = 0; row < table.length; row++) {
+        for (var row = 0; row < table.length; row++) {
 
             /*
              * Initializing Horizontal/Vertical variables
@@ -104,13 +104,12 @@ public class MutantServiceImpl implements MutantService {
 
             logger.trace("---------------- Row {} ----------------", row + 1);
 
-            for (int col = 0; col < nucleotidesRow.length; col++) {
+            for (var col = 0; col < nucleotidesRow.length; col++) {
 
                 /* ****************************************************************************
                  *  HORIZONTAL SECTION
                  *  checking if exists a mutant sequence in Horizontal way
                  * ****************************************************************************/
-                logger.trace("---------------------------------------------------------------");
                 logger.trace("--- horizontal validation -------------------------------------");
                 logger.trace("Horizontal Sequence: {}", sequenceHorizontal);
                 // building nucleotide object
@@ -125,7 +124,6 @@ public class MutantServiceImpl implements MutantService {
                  *  VERTICAL SECTION
                  * checking if exists a mutant sequence in Vertical way
                  * ****************************************************************************/
-                logger.trace("---------------------------------------------------------------");
                 logger.trace("--- vertical validation -------------------------------------");
                 logger.trace("Vertical Sequence: {}", sequenceVertical);
                 // building nucleotide object
@@ -144,13 +142,13 @@ public class MutantServiceImpl implements MutantService {
                  * Initializing Obliques variables
                  */
 
-                boolean breakO = false;
-                boolean breakI = false;
+                var breakO = false;
+                var breakI = false;
                 sequenceOblique = sequenceService.generateSequence(SequenceType.OBLIQUE);
                 sequenceReverseOblique = sequenceService.generateSequence(SequenceType.REVERSE_OBLIQUE);
 
                 logger.trace("--- searching oblique sequences -------------------------------------");
-                for (int i = 0, j = table.length; i < table.length; i++, j--) {
+                for (var i = 0; i < table.length; i++) {
 
                     int oRow = row + i;
                     int oCol = col + i;
@@ -162,7 +160,6 @@ public class MutantServiceImpl implements MutantService {
                     // checking if exists a mutant sequence in Oblique way (up to down)
                     if (!breakO) {
                         if (oRow < table.length && oCol < table[row].length) {
-                            //nucleotide = table[tmpRow][tmpCol];
                             logger.trace("---------------------------------------------------------------");
                             logger.trace("--- oblique validation -------------------------------------");
                             logger.trace("Oblique Sequence: {}", sequenceOblique);
@@ -185,15 +182,12 @@ public class MutantServiceImpl implements MutantService {
                             logger.trace("Reverse Oblique Sequence: {}", sequenceReverseOblique);
                             nucleotide = sequenceService.generateNucleotide(table[rRow][rCol], rRow, rCol);
 
-                            //validateSequence(nucleotide, validationData, SequenceType.REVERSE_OBLIQUE);
                             sequenceService.validateSequence(nucleotide, sequenceReverseOblique);
                             sequenceReverseOblique = sequenceService.isComplete(sequenceReverseOblique, validationData);
                             logger.trace("Inversa Oblicua. data[row:{}, column:{}, value: {}, sequence: {}]", rRow, rCol, nucleotide, sequenceReverseOblique);
                         } else {
-                            //validationData.setSequenceI("");
                             sequenceReverseOblique = sequenceService.generateSequence(SequenceType.REVERSE_OBLIQUE);
                             logger.trace("Inversa oversize of table, min len to row & col is {}. Current position [{}][{}]", 0, rRow, rCol);
-                            //break;
                             breakI = true;
                         }
                     }

@@ -4,18 +4,14 @@ import com.hvs.mutant.service.DnaService;
 import com.hvs.mutant.shared.ErrorType;
 import com.hvs.mutant.shared.config.AppConfig;
 import com.hvs.mutant.shared.exception.DnaStructureException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class DnaServiceImpl implements DnaService {
 
-    private Logger logger = LoggerFactory.getLogger(DnaServiceImpl.class);
     private AppConfig config;
 
     public DnaServiceImpl(AppConfig config) {
@@ -38,8 +34,8 @@ public class DnaServiceImpl implements DnaService {
         }
 
         String exp = config.getExpDnaContentValid();
-        Pattern pat = Pattern.compile(exp);
-        Matcher matcher = pat.matcher(String.valueOf(sequence));
+        var pat = Pattern.compile(exp);
+        var matcher = pat.matcher(String.valueOf(sequence));
         if (!matcher.matches()) {
             throw new DnaStructureException(
                     String.format(config.getErrorMessages().get(ErrorType.SEQ_CONTENT_INVALID.name())
@@ -56,7 +52,7 @@ public class DnaServiceImpl implements DnaService {
      */
     @Override
     public char[][] buildDnaTable(String[] dna) {
-        char[][] table = new char[dna.length][dna.length];
+        var table = new char[dna.length][dna.length];
 
         // loop of dna
         for (var row = 0; row < dna.length; row++) {

@@ -34,8 +34,7 @@ public class MutantControllerImpl implements MutantController {
 
         logger.debug("running mutant method");
         // call to mutant service to validate DNA
-        var response = mutantService.validate(specimen);
-        return response;
+        return mutantService.validate(specimen);
 
     }
 

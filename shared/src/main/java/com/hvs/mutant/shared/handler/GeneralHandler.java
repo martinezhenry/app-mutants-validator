@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
+/**
+ * Class to hand exception in the application
+ */
 @RestControllerAdvice
 public class GeneralHandler {
 
@@ -24,6 +28,12 @@ public class GeneralHandler {
 
     }
 
+    /**
+     * Handler to every Exception not caught
+     *
+     * @param e Exception
+     * @return Response Entity to send to the consumer of the service
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Response> generalExceptionHandler(Exception e) {
         logger.error("GeneralException: {}", e.getMessage(), e);
@@ -33,6 +43,12 @@ public class GeneralHandler {
 
     }
 
+    /**
+     * Handler to NotMutantException, execute when NotMutantException is throw, used to build response when is not a mutant DNA
+     *
+     * @param e Exception
+     * @return Response Entity to send to the consumer of the service
+     */
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(NotMutantException.class)
     public ResponseEntity<Response> notMutantExceptionHandler(NotMutantException e) {
@@ -43,6 +59,11 @@ public class GeneralHandler {
     }
 
 
+    /**
+     * Handler to DnaStructureException, execute when DnaStructureException is throw
+     * @param e Exception
+     * @return Response Entity to send to the consumer of the service
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler( {DnaStructureException.class})
     public ResponseEntity<Response> dnaStructureExceptionHandler(DnaStructureException e) {

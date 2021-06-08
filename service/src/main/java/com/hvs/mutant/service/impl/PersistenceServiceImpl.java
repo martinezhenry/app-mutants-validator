@@ -86,7 +86,7 @@ public class PersistenceServiceImpl implements PersistenceService {
 
         double mutants = stats.getCountMutantDna();
         int humans = stats.getCountHumanDna();
-        double ratio = 0.0;
+        var ratio = 0.0;
 
         if (mutant) {
             mutants++;

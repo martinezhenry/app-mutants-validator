@@ -14,6 +14,10 @@ public class StatsServiceImpl implements StatsService {
         this.persistenceService = persistenceService;
     }
 
+    /**
+     * find stats from stat repository
+     * @return Stats obtained
+     */
     @Override
     public Stats getStats() {
         return persistenceService.findStats();

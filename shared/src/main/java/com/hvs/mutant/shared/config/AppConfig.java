@@ -7,6 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
 
+/**
+ * Class to represent the config application
+ * Obtain the info from application properties spring boot from config prefix
+ */
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "config")
@@ -19,7 +23,6 @@ public class AppConfig {
     private int statusToNotMutant;
     private boolean debug;
     private String expDnaContentValid;
-    //private String statsId;
 
     private HashMap<String, String> errorMessages;
 
