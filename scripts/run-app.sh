@@ -14,4 +14,4 @@ cd "$BASEDIR" || exit
 cd ..
 
 ## Running with docker-compose
-docker-compose up --force-recreate --build "$DETACH"
+docker-compose up --remove-orphans --force-recreate --build "$DETACH"

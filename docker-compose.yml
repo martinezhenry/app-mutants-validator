@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   mutant-app:
-    build: .
+    build: ${DOCKER_COMPOSE_FILE-.}
     links:
       - database
     ports:
