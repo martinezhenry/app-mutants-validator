@@ -3,7 +3,6 @@ COPY app /usr/src/app/app
 COPY controller /usr/src/app/controller
 COPY service /usr/src/app/service
 COPY shared /usr/src/app/shared
-COPY entity /usr/src/app/entity
 COPY model /usr/src/app/model
 COPY repository /usr/src/app/repository
 COPY pom.xml /usr/src/app
@@ -25,13 +24,11 @@ LABEL maintainer="Henry Martinez"
 
 ENV TZ=America/Bogota
 
-#ARG JAR_FILE
+ARG PROFILE=test
 
-#RUN apt-get update && apt-get upgrade -y && apt-get install haveged -y
+ENV ENV_PROFILE=$PROFILE
 
-#RUN mkdir -p /home/novotrans/bin
 WORKDIR /home/app/bin
-#VOLUME /home/novotrans
 
 RUN mkdir -p /home/app/logs && addgroup mutant && adduser \
                                          --disabled-password \
@@ -42,7 +39,6 @@ RUN mkdir -p /home/app/logs && addgroup mutant && adduser \
 
 EXPOSE 8080
 
-#COPY --from=builder /home/novotrans/bin/ /home/novotrans/
 COPY --from=builder /home/app/bin/dependencies ./
 RUN true
 COPY --from=builder /home/app/bin/spring-boot-loader ./
@@ -55,4 +51,4 @@ RUN chown -R mutant:mutant /home/app
 
 USER mutant
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java","-Dspring.profiles.active=$ENV_PROFILE", "org.springframework.boot.loader.JarLauncher", "--server.port=8080"]

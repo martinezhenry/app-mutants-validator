@@ -137,6 +137,29 @@ public class MutantApplicationInvalidTest {
         Assertions.assertNotNull(response.getRequestId());
 
 
+        // Invalid DNA NULL
+        specimen.setDna(null);
+        response = this.restTemplate.postForObject("http://" + host + ":" + port + "/" + actionMutant, specimen, Response.class);
+        Assertions.assertNotNull(response);
+        Assertions.assertNull(response.getSpecimen());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        Assertions.assertNotNull(response.getMessage());
+        Assertions.assertNotNull(response.getMessage());
+        Assertions.assertNotNull(response.getDatetime());
+        Assertions.assertNotNull(response.getRequestId());
+
+
+        // Invalid Specimen NULL
+        response = this.restTemplate.postForObject("http://" + host + ":" + port + "/" + actionMutant, null, Response.class);
+        Assertions.assertNotNull(response);
+        Assertions.assertNull(response.getSpecimen());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        Assertions.assertNotNull(response.getMessage());
+        Assertions.assertNotNull(response.getMessage());
+        Assertions.assertNotNull(response.getDatetime());
+        Assertions.assertNotNull(response.getRequestId());
+
+
     }
 }
 

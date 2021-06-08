@@ -5,7 +5,9 @@ import com.hvs.mutant.service.DnaService;
 import com.hvs.mutant.service.MutantService;
 import com.hvs.mutant.service.PersistenceService;
 import com.hvs.mutant.service.SequenceService;
+import com.hvs.mutant.shared.ErrorType;
 import com.hvs.mutant.shared.config.AppConfig;
+import com.hvs.mutant.shared.exception.DnaStructureException;
 import com.hvs.mutant.shared.exception.NotMutantException;
 import com.hvs.mutant.shared.util.MutantUtil;
 import org.slf4j.Logger;
@@ -46,6 +48,15 @@ public class MutantServiceImpl implements MutantService {
      */
     @Override
     public Response validate(Specimen specimen) {
+
+        // Validating Specimen present
+        Optional.ofNullable(specimen).orElseThrow(
+                () -> new DnaStructureException(config.getErrorMessages().get(ErrorType.SPECIMEN_NULL.name())));
+
+        // Validating DNA present
+        Optional.ofNullable(specimen.getDna()).orElseThrow(
+                () -> new DnaStructureException(config.getErrorMessages().get(ErrorType.DNA_NULL.name())));
+
         // detecting if is a mutant DNA
         boolean mutant = isMutant(specimen.getDna());
 

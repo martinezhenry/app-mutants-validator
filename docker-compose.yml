@@ -5,34 +5,15 @@ services:
     links:
       - database
     ports:
-      - target: "${TARGET_PORT}"
+      - target: 8080
         published: "${PUBLISH_PORT}"
         protocol: tcp
         mode: ingress
-    #env_file:
-    #  - ${ENV_FILE}
-    #volumes:
-    #  - logs:/home/novotrans/logs
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '${CPU}'
-          memory: ${RAM}
+    environment:
+      DB_HOST: database
+      DB_PORT: 27017
+      SEQUENCES: ${SEQUENCES}
+      NUCLEOTIDE_NUMBER: ${NUCLEOTIDE_NUMBER}
+      DEBUG: ${DEBUG}
   database:
     image: mongo:4.4.0
-
-
-    #secrets:
-    #  - DB_USER_SGC
-    #  - DB_PASS_SGC
-#volumes:
-#  logs:
-#    external: true
-
-#secrets:
-#  DB_USER_SGC:
-#    external: true
-#  DB_PASS_SGC:
-#    external: true
-

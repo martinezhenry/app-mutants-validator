@@ -1,3 +1,5 @@
+
+---
 spring:
   profiles:
     active: "dev"
@@ -17,6 +19,33 @@ logging:
     com:
       hvs:
         mutant: DEBUG
+  pattern:
+    level: "request-id=[%X{request-id}] remote-ip=[%X{remote-ip}] %5p"
+
+server:
+  tomcat:
+    max-threads: 500
+
+---
+spring:
+  profiles:
+    active: "test"
+    include:
+      - "config"
+
+  data:
+    mongodb:
+      host: ${DB_HOST:localhost}
+      port: ${DB_PORT:27017}
+      username: ${DB_USER:}
+      pass: ${DB_PASS:}
+      database: app-mutant-validator
+
+logging:
+  level:
+    com:
+      hvs:
+        mutant: INFO
   pattern:
     level: "request-id=[%X{request-id}] remote-ip=[%X{remote-ip}] %5p"
 
