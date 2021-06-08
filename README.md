@@ -146,7 +146,7 @@ X-REQUEST-ID: <Id de pa petición>
 |specimen|Objeto representativo de un Specimen|Object|Ver -> [Especificaciones Specimen](#especificaciones-specimen)
 
 
-**Especificaciones `Specimen`**
+##### **Especificaciones `Specimen`**
 
 |atributo|descripción|tipo|ejemplo|
 |---|---|---|---|
