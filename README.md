@@ -122,7 +122,7 @@ curl --location --request POST 'http://127.0.0.1:80/mutant' \
 ```
 
 
-#### Respuesta Exitosa Mutante
+### Respuesta Exitosa Mutante
 
 ##### Estatus HTTP Code
 - 200 - OK
@@ -170,7 +170,7 @@ X-REQUEST-ID: <Id de pa petición>
 ```
 
 
-#### Respuesta Exitosa No Mutante
+### Respuesta Exitosa No Mutante
 
 ##### Estatus HTTP Code
 - 403 - OK
@@ -210,7 +210,7 @@ X-REQUEST-ID: <Id de pa petición>
 ```
 
 
-#### Respuesta Fallida
+### Respuesta Fallida
 
 ##### Estatus HTTP Code
 - 400 - BAD REQUEST
@@ -251,6 +251,27 @@ X-REQUEST-ID: <Id de pa petición>
 }
 ```
 
+**Ejemplo** Cuerpo vacío
+```
+{
+    "requestId": "738D819F-DDD9-4BF2-AF98-C80AA979E643",
+    "datetime": "2021-06-08T02:58:43.409+00:00",
+    "status": 500,
+    "message": "Content type '' not supported"
+}
+```
+
+**Ejemplo** DNA nulo
+```
+{
+    "requestId": "79C46634-B80D-4688-AF16-6C8296FCB365",
+    "datetime": "2021-06-08T03:00:49.089+00:00",
+    "status": 400,
+    "message": "Dna should be null"
+}
+```
+
+
 ### Servicio Stats
 Servicio para obtener las estadísticas de la aplicación
 
@@ -264,35 +285,73 @@ Servicio para obtener las estadísticas de la aplicación
 - GET
 
 
+##### Ejemplo de una petición con curl
+```
+curl --location --request GET 'http://127.0.0.1:80/stats'
+```
+
+
+### Respuesta Exitosa
+
+##### Estatus HTTP Code
+- 200 - OK
+
 ##### Cabeceras
 ```
 Content-Type: application/json
-Content-Length: <longitud del cuerpo de la petición>
+X-REQUEST-ID: <Id de pa petición>
 ```
-
-> Debe reemplazar `<longitud del cuerpo de la petición>` por el número de caracteres
-> que se envíen en el cuerpo de la petición
-
 
 ##### Cuerpo
 
 |atributo|descripción|tipo|ejemplo|
 |---|---|---|---|
-|dna|arreglo de secuencias de ADN que se desean validar|String[]|\["ATC", "ATC", "ATC"\]
+|requestId|id de la petición|String|A168DB26-4C1B-4A38-9635-4990192B5135
+|datetime|fecha y hora de la petición|Date|2021-06-08T01:35:58.638+00:00
+|status|Código del estado de la respuesta|Integer|200
+|message|Mensaje descriptivo de la respuesta|String|OK
+|specimen|Objeto representativo de un Specimen|Object|Ver -> [Especificaciones Specimen](#especificaciones-specimen)
+
+**Especificaciones `Specimen`**
+
+|atributo|descripción|tipo|ejemplo|
+|---|---|---|---|
+|ratio|Promedio de peticiones (mutantes/humanos)|Double|2.0
+|count_mutant_dna|Cantidad de mutantes detectados|Integer|4
+|count_human_dna|Cantidad de Humanos detectados|Integer|2
 
 **Ejemplo**
 ```
-{ 
-    "dna": ["ATC", "ATC", "ATC"]
+{
+    "ratio": 2.0,
+    "count_mutant_dna": 4,
+    "count_human_dna": 2
 }
 ```
 
 
-##### Ejemplo de una petición con curl
+---
+
+### Error General 
+
+##### **Ejemplo Petición a una URL no existente**
+
+##### Estatus HTTP Code
+- 404 - NOT FOUND
+
+##### Cabeceras
 ```
-curl --location --request POST 'http://127.0.0.1:80/mutant' \
---header 'Content-Type: application/json' \
---data-raw '{ 
-    "dna": ["ATC", "ATC", "ATC"]
-}'
+Content-Type: application/json
+X-REQUEST-ID: <Id de pa petición>
+```
+
+**Cuerpo**
+```
+{
+    "timestamp": "2021-06-08T03:04:51.908+00:00",
+    "status": 404,
+    "error": "Not Found",
+    "message": "",
+    "path": "/stats2"
+}
 ```
