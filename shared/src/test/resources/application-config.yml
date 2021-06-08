@@ -15,3 +15,4 @@ config:
   statusToNotMutant: ${NOT_MUTANT_STATUS:403}
   debug: ${DEBUG:false}
   stats-id: stats
+  exp-dna-content-valid: "(A|T|C|G)+"

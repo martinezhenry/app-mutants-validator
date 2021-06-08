@@ -21,3 +21,4 @@ config:
   nucleotidesForSequence: ${NUCLEOTIDE_NUMBER:4}
   status-to-mutant: ${MUTANT_STATUS:200}
   status-to-not-mutant: ${NOT_MUTANT_STATUS:403}
+  exp-dna-content-valid: "(A|T|C|G)+"

@@ -7,6 +7,7 @@ Aplicación para detectar si una persona tiene genes mutantes a partir de su cad
 - Java 11
 - Spring Boot version 2.4.0
 - Mongo version 4.4.0
+- Maven version 3.6.3
 
 ---
 
