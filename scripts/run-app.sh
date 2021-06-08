@@ -14,4 +14,4 @@ cd "$BASEDIR" || exit
 cd ..
 
 ## Running with docker-compose
-docker-compose up --remove-orphans --force-recreate --build "$DETACH" -p app-mutant
+docker-compose  -p app-mutant up --remove-orphans --force-recreate --build "$DETACH"
