@@ -55,6 +55,7 @@ git clone https://github.com/martinezhenry/app-mutants-validator
 ##### Paso 2.
 ```
 cd app-mutants-validator
+chmod u+x ./scrtips/run-app.sh
 ```
 
 ##### Paso 3.
