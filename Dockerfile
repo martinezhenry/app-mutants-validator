@@ -26,7 +26,7 @@ ENV TZ=America/Bogota
 
 ARG PROFILE=test
 
-ENV ENV_PROFILE=$PROFILE
+ENV ENV_PROFILE $PROFILE
 
 WORKDIR /home/app/bin
 
@@ -51,4 +51,4 @@ RUN chown -R mutant:mutant /home/app
 
 USER mutant
 
-ENTRYPOINT ["java",'-Dspring.profiles.active=$ENV_PROFILE', "org.springframework.boot.loader.JarLauncher", "--server.port=8080"]
+ENTRYPOINT ["java","-Dspring.profiles.active=$ENV_PROFILE", "org.springframework.boot.loader.JarLauncher", "--server.port=8080"]
