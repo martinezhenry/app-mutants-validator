@@ -56,13 +56,13 @@ git clone https://github.com/martinezhenry/app-mutants-validator
 ##### Paso 2.
 ```
 cd app-mutants-validator
-chmod u+x ./scrtips/run-app.sh
+chmod u+x ./scripts/run-app.sh
 ```
 
 ##### Paso 3.
 ###### Iniciando con script `run.app.sh` (Solo ambientes Linux)
 ```
-./scripts/run.app.sh
+./scripts/run-app.sh
 ```
 
 ###### Iniciando con docker compose (Windows y Linux) 
@@ -70,7 +70,7 @@ chmod u+x ./scrtips/run-app.sh
 docker-compose up --force-recreate --build -d
 ```
 
-> **Nota*: los parametros `--force-recreate`, `--build` y `-d` puede ser descartados.
+> **Nota**: los parametros `--force-recreate`, `--build` y `-d` puede ser descartados.
 > Se usan para forzar la reconstrucción de las imagenes de docker en caso de que estas 
 > ya existen y para ejecutar en background.
 
@@ -96,7 +96,7 @@ Content-Type: application/json
 Content-Length: <longitud del cuerpo de la petición>
 ```
 
-> Debe reemplazar `<longitud del cuerpo de la petición>` por el número de caracteres 
+> **Nota**: Debe reemplazar `<longitud del cuerpo de la petición>` por el número de caracteres 
 > que se envíen en el cuerpo de la petición
 
 
