@@ -8,6 +8,6 @@ cd "$BASEDIR" || exit
 
 docker pull "$IMAGE"
 
-docker-compose -p mutant -f ./deploy/docker-compose.yml up --remove-orphans --force-recreate --build -d
+docker-compose -p dev_mutant -f ./deploy/docker-compose.yml up --remove-orphans --force-recreate --build -d
 
 
