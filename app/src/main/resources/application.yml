@@ -1,10 +1,17 @@
 
----
 spring:
   profiles:
     active: "dev"
     include:
       - "config"
+
+logging:
+  pattern:
+    level: "request-id=[%X{request-id}] remote-ip=[%X{remote-ip}] %5p"
+
+---
+spring:
+  profiles: dev
 
   data:
     mongodb:
@@ -19,8 +26,7 @@ logging:
     com:
       hvs:
         mutant: DEBUG
-  pattern:
-    level: "request-id=[%X{request-id}] remote-ip=[%X{remote-ip}] %5p"
+
 
 server:
   tomcat:
@@ -28,10 +34,7 @@ server:
 
 ---
 spring:
-  profiles:
-    active: "test"
-    include:
-      - "config"
+  profiles: test
 
   data:
     mongodb:

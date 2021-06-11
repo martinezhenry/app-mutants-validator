@@ -96,21 +96,22 @@ public class SequenceServiceImpl implements SequenceService {
             // comparate
             if (currentNucleotide == previosNucleotide) {
                 // equals, add nucleotide to sequence
-                logger.debug("nucleotides matched, {} = {}", previos, nucleotide);
+                logger.trace("nucleotides matched, {} = {}", previos, nucleotide);
                 sequence.getNucleotides().add(nucleotide);
                 logger.trace("current nucleotides: {}", sequence.getNucleotides());
 
             } else {
                 // cleaning sequence, are not equals
-                logger.debug("nucleotides NOT matched, {} = {}", previos, nucleotide);
+                logger.trace("nucleotides NOT matched, {} = {}", previos, nucleotide);
                 logger.trace("Clearing sequence: {}", sequence);
                 sequence.setNucleotides(new ArrayList<>());
+                sequence.getNucleotides().add(nucleotide);
             }
 
 
         }, () -> {
             // setting current nucleotide, last nucleotide not exists
-            logger.debug("last nucleotide is emtpy, setting current nucleotide: {}", nucleotide);
+            logger.trace("last nucleotide is emtpy, setting current nucleotide: {}", nucleotide);
             sequence.getNucleotides().add(nucleotide);
         });
 
